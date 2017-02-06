@@ -1,0 +1,6 @@
+framework module Pods_MenuBarTest3UITests {
+  umbrella header "Pods-MenuBarTest3UITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
