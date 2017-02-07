@@ -1,12 +1,22 @@
 PODS:
-  - XLPagerTabStrip (7.0.0)
+  - XLPagerTabStrip (5.0.0)
 
 DEPENDENCIES:
-  - XLPagerTabStrip (~> 7.0)
+  - XLPagerTabStrip (from `https://github.com/KelvinJin/XLPagerTabStrip`, branch `swift3`)
+
+EXTERNAL SOURCES:
+  XLPagerTabStrip:
+    :branch: swift3
+    :git: https://github.com/KelvinJin/XLPagerTabStrip
+
+CHECKOUT OPTIONS:
+  XLPagerTabStrip:
+    :commit: 99e3cbd5e6b99bb6b1fdf25f4af58fe2e38ad308
+    :git: https://github.com/KelvinJin/XLPagerTabStrip
 
 SPEC CHECKSUMS:
-  XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
+  XLPagerTabStrip: 87b8b705f9a7178e76a063ffaa2d70045944a965
 
-PODFILE CHECKSUM: b86b2bc02fe631cc76c15289e331297af50cadcc
+PODFILE CHECKSUM: 53c63a509848a48429880a7f0720ab2b19d65a05
 
 COCOAPODS: 1.2.0

@@ -1,7 +1,7 @@
 //  SegmentedPagerTabStripViewController.swift
 //  XLPagerTabStrip ( https://github.com/xmartlabs/XLPagerTabStrip )
 //
-//  Copyright (c) 2017 Xmartlabs ( http://xmartlabs.com )
+//  Copyright (c) 2016 Xmartlabs ( http://xmartlabs.com )
 //
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,7 +36,7 @@ public struct SegmentedPagerTabStripSettings {
 
 open class SegmentedPagerTabStripViewController: PagerTabStripViewController, PagerTabStripDataSource, PagerTabStripDelegate {
     
-    @IBOutlet weak public var segmentedControl: UISegmentedControl!
+    @IBOutlet lazy open var segmentedControl: UISegmentedControl! = UISegmentedControl()
     
     open var settings = SegmentedPagerTabStripSettings()
     
@@ -54,11 +54,10 @@ open class SegmentedPagerTabStripViewController: PagerTabStripViewController, Pa
         datasource = self
     }
     
-    private(set) var shouldUpdateSegmentedControl = true
+    fileprivate(set) var shouldUpdateSegmentedControl = true
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        segmentedControl = segmentedControl ?? UISegmentedControl()
         if segmentedControl.superview == nil {
             navigationItem.titleView = segmentedControl
         }
@@ -90,14 +89,14 @@ open class SegmentedPagerTabStripViewController: PagerTabStripViewController, Pa
     
     func segmentedControlChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
-        updateIndicator(for: self, fromIndex: currentIndex, toIndex: index)
+        pagerTabStripViewController(self, updateIndicatorFromIndex: currentIndex, toIndex: index)
         shouldUpdateSegmentedControl = false
-        moveToViewController(at: index)
+        moveToViewControllerAtIndex(index)
     }
     
     // MARK: - PagerTabStripDelegate
-
-    open func updateIndicator(for viewController: PagerTabStripViewController, fromIndex: Int, toIndex: Int) {
+    
+    open func pagerTabStripViewController(_ pagerTabStripViewController: PagerTabStripViewController, updateIndicatorFromIndex fromIndex: Int, toIndex: Int) {
         if shouldUpdateSegmentedControl {
             segmentedControl.selectedSegmentIndex = toIndex
         }

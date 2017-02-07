@@ -5,14 +5,12 @@
 //  Created by MeDiSee on 2/6/2560 BE.
 //  Copyright © 2560 MeDiSee. All rights reserved.
 //
-import Foundation
+
 import UIKit
 import XLPagerTabStrip
 class ViewController: ButtonBarPagerTabStripViewController {
     let purpleInspireColor = UIColor(red:0.13, green:0.03, blue:0.25, alpha:1.0)
-    
     override func viewDidLoad() {
-        // change selected bar color
         settings.style.buttonBarBackgroundColor = .white
         settings.style.buttonBarItemBackgroundColor = .white
         settings.style.selectedBarBackgroundColor = purpleInspireColor

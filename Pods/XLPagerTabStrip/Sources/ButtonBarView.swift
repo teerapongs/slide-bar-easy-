@@ -1,7 +1,7 @@
 //  ButtonBarView.swift
 //  XLPagerTabStrip ( https://github.com/xmartlabs/XLPagerTabStrip )
 //
-//  Copyright (c) 2017 Xmartlabs ( http://xmartlabs.com )
+//  Copyright (c) 2016 Xmartlabs ( http://xmartlabs.com )
 //
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -47,7 +47,7 @@ open class ButtonBarView: UICollectionView {
     
     internal var selectedBarHeight: CGFloat = 4 {
         didSet {
-            updateSelectedBarYPosition()
+            self.updateSlectedBarYPosition()
         }
     }
     var selectedBarAlignment: SelectedBarAlignment = .center
@@ -58,17 +58,23 @@ open class ButtonBarView: UICollectionView {
         addSubview(selectedBar)
     }
     
-    public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         addSubview(selectedBar)
     }
     
-    open func moveTo(index: Int, animated: Bool, swipeDirection: SwipeDirection, pagerScroll: PagerScroll) {
-        selectedIndex = index
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        selectedBar.frame.origin.y = self.frame.size.height - CGFloat(self.selectedBarHeight)
+    }
+    
+    open func moveToIndex(_ toIndex: Int, animated: Bool, swipeDirection: SwipeDirection, pagerScroll: PagerScroll) {
+        selectedIndex = toIndex
         updateSelectedBarPosition(animated, swipeDirection: swipeDirection, pagerScroll: pagerScroll)
     }
     
-    open func move(fromIndex: Int, toIndex: Int, progressPercentage: CGFloat,pagerScroll: PagerScroll) {
+    open func moveFromIndex(_ fromIndex: Int, toIndex: Int, progressPercentage: CGFloat,pagerScroll: PagerScroll) {
         selectedIndex = progressPercentage > 0.5 ? toIndex : fromIndex
         
         let fromFrame = layoutAttributesForItem(at: IndexPath(item: fromIndex, section: 0))!.frame
@@ -116,7 +122,7 @@ open class ButtonBarView: UICollectionView {
         let attributes = layoutAttributesForItem(at: selectedCellIndexPath)
         let selectedCellFrame = attributes!.frame
         
-        updateContentOffset(animated: animated, pagerScroll: pagerScroll, toFrame: selectedCellFrame, toIndex: (selectedCellIndexPath as NSIndexPath).row)
+        updateContentOffset(animated, pagerScroll: pagerScroll, toFrame: selectedCellFrame, toIndex: (selectedCellIndexPath as NSIndexPath).row)
         
         selectedBarFrame.size.width = selectedCellFrame.size.width
         selectedBarFrame.origin.x = selectedCellFrame.origin.x
@@ -133,13 +139,13 @@ open class ButtonBarView: UICollectionView {
     
     // MARK: - Helpers
     
-    private func updateContentOffset(animated: Bool, pagerScroll: PagerScroll, toFrame: CGRect, toIndex: Int) -> Void {
+    fileprivate func updateContentOffset(_ animated: Bool, pagerScroll: PagerScroll, toFrame: CGRect, toIndex: Int) -> Void {
         guard pagerScroll != .no || (pagerScroll != .scrollOnlyIfOutOfScreen && (toFrame.origin.x < contentOffset.x || toFrame.origin.x >= (contentOffset.x + frame.size.width - contentInset.left))) else { return }
         let targetContentOffset = contentSize.width > frame.size.width ? contentOffsetForCell(withFrame: toFrame, andIndex: toIndex) : 0
         setContentOffset(CGPoint(x: targetContentOffset, y: 0), animated: animated)
     }
     
-    private func contentOffsetForCell(withFrame cellFrame: CGRect, andIndex index: Int) -> CGFloat {
+    fileprivate func contentOffsetForCell(withFrame cellFrame: CGRect, andIndex index: Int) -> CGFloat {
         let sectionInset = (collectionViewLayout as! UICollectionViewFlowLayout).sectionInset
         var alignmentOffset: CGFloat = 0.0
         
@@ -165,15 +171,10 @@ open class ButtonBarView: UICollectionView {
         return contentOffset
     }
     
-    private func updateSelectedBarYPosition() {
+    fileprivate func updateSlectedBarYPosition() {
         var selectedBarFrame = selectedBar.frame
         selectedBarFrame.origin.y = frame.size.height - selectedBarHeight
         selectedBarFrame.size.height = selectedBarHeight
         selectedBar.frame = selectedBarFrame
-    }
-    
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        updateSelectedBarYPosition()
     }
 }

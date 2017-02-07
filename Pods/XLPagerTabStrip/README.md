@@ -5,11 +5,10 @@
 <img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
 <a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift2-compatible-4BC51D.svg?style=flat" alt="Swift 2 compatible" /></a>
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible" /></a>
-<a href="https://cocoapods.org/pods/XLActionController"><img src="https://img.shields.io/badge/pod-7.0.0-blue.svg" alt="CocoaPods compatible" /></a>
+<a href="https://cocoapods.org/pods/XLActionController"><img src="https://img.shields.io/badge/pod-5.0.0-blue.svg" alt="CocoaPods compatible" /></a>
 <a href="https://raw.githubusercontent.com/xmartlabs/XLPagerTabStrip/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" />
+<a href="https://codebeat.co/projects/github-com-xmartlabs-xlpagertabstrip"><img alt="codebeat badge" src="https://codebeat.co/badges/f32c9ad3-0aa1-4b40-a632-9421211bd39e" /></a>
 </a>
-<!-- <a href="https://codebeat.co/projects/github-com-xmartlabs-xlpagertabstrip"><img alt="codebeat badge" src="https://codebeat.co/badges/f32c9ad3-0aa1-4b40-a632-9421211bd39e" /></a> -->
-
 </p>
 
 Made with ❤️ by [XMARTLABS](http://xmartlabs.com).
@@ -101,10 +100,10 @@ For `BarPagerTabStripViewController` we should connect `barView` outlet. barView
 
 ##### Provide the view controllers that will appear embedded into the PagerTabStrip view controller
 
-You can provide the view controllers by overriding `func viewControllers(for: pagerTabStripController: PagerTabStripViewController) -> [UIViewController]` method.
+You can provide the view controllers by overriding `func viewControllersForPagerTabStrip(pagerTabStripController: PagerTabStripViewController) -> [UIViewController]` method.
 
 ```swift
-override public func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
+override public func viewControllersForPagerTabStrip(pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
   return [MyEmbeddedViewController(), MySecondEmbeddedViewController()]
 }
 ```
@@ -115,19 +114,17 @@ override public func viewControllers(for pagerTabStripController: PagerTabStripV
 ##### Provide information to show in each indicator
 
 Every UIViewController that will appear within the PagerTabStrip needs to provide either a title or an image.
-In order to do so they should conform to `IndicatorInfoProvider` by implementing `func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo`
+In order to do so they should conform to `IndicatorInfoProvider` by implementing `func indicatorInfoForPagerTabStrip(pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo`
  which provides the information required to show the PagerTabStrip menu (indicator) associated with the view controller.
 
 ```swift
 class MyEmbeddedViewController: UITableViewController, IndicatorInfoProvider {
 
-  func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+  func indicatorInfoForPagerTabStrip(pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
     return IndicatorInfo(title: "My Child title")
   }
 }
 ```
-
-**For a detailed step by step guide about how to use the library, please check out this community [blog post](https://medium.com/michaeladeyeri/how-to-implement-android-like-tab-layouts-in-ios-using-swift-3-578516c3aa9).**
 
 That's it! We're done! 🍻🍻
 
@@ -175,12 +172,12 @@ Normally we don't need to implement these protocols because each pager type alre
 ```swift
 public protocol PagerTabStripDelegate: class {
 
-    func updateIndicator(for viewController: PagerTabStripViewController, fromIndex: Int, toIndex: Int)
+    func pagerTabStripViewController(pagerTabStripViewController: PagerTabStripViewController, updateIndicatorFromIndex fromIndex: Int, toIndex: Int) throws
 }
 
 public protocol PagerTabStripIsProgressiveDelegate : PagerTabStripDelegate {
 
-    func updateIndicator(for viewController: PagerTabStripViewController, fromIndex: Int, toIndex: Int, withProgressPercentage progressPercentage: CGFloat, indexWasChanged: Bool)
+    func pagerTabStripViewController(pagerTabStripViewController: PagerTabStripViewController, updateIndicatorFromIndex fromIndex: Int, toIndex: Int, withProgressPercentage progressPercentage: CGFloat, indexWasChanged: Bool) throws
 }
 ```
 
@@ -290,7 +287,7 @@ settings.style.segmentedControlColor: UIColor?
 ## Requirements
 
 * iOS 8.0+
-* Xcode 8.0+
+* Xcode 7.3+
 
 ## Examples
 
@@ -305,7 +302,7 @@ Follow these 3 steps to run Example project: Clone XLPagerTabStrip repository, o
 To install XLPagerTabStrip, simply add the following line to your Podfile:
 
 ```ruby
-pod 'XLPagerTabStrip', '~> 7.0'
+pod 'XLPagerTabStrip', '~> 5.0'
 ```
 
 ### Carthage
@@ -315,30 +312,27 @@ pod 'XLPagerTabStrip', '~> 7.0'
 To install XLPagerTabStrip, simply add the following line to your Cartfile:
 
 ```ogdl
-github "xmartlabs/XLPagerTabStrip" ~> 7.0
+github "xmartlabs/XLPagerTabStrip" ~> 5.0
 ```
 
 ## FAQ
 
 #### How to change the visible child view controller programmatically
 
-`PagerTabStripViewController` provides the following methods to programmatically change the visible child view controller:
+`XLPagerTabStripViewController` provides the following methods to programmatically change the visible child view controller:
 
 ```swift
-func moveToViewController(at index: Int)
-func moveToViewController(at index: Int, animated: Bool)
-func moveTo(viewController: UIViewController)
-func moveTo(viewController: UIViewController, animated: Bool)
+func moveToViewControllerAtIndex(index: Int)
+func moveToViewControllerAtIndex(index: Int, animated: Bool)
+func moveToViewController(viewController: UIViewController)
+func moveToViewController(viewController: UIViewController, animated: Bool)
 ```
 
-
-#### How to migrate from Swift 2 to Swift 3 <a name="migrate"></a>
-
-Check out [our migration guide](https://github.com/xmartlabs/XLPagerTabStrip/blob/master/Migration.md)
 
 ## Author
 
 * [Martin Barreto](https://github.com/mtnBarreto) ([@mtnBarreto](https://twitter.com/mtnBarreto))
+
 
 ## Change Log
 

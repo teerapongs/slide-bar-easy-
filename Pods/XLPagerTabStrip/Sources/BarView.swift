@@ -1,7 +1,7 @@
 //  BarView.swift
 //  XLPagerTabStrip ( https://github.com/xmartlabs/XLPagerTabStrip )
 //
-//  Copyright (c) 2017 Xmartlabs ( http://xmartlabs.com )
+//  Copyright (c) 2016 Xmartlabs ( http://xmartlabs.com )
 //
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -53,7 +53,7 @@ open class BarView: UIView {
     
     // MARK: - Helpers
     
-    private func updateSelectedBarPosition(with animation: Bool) {
+    fileprivate func updateSelectedBarPositionWithAnimation(_ animation: Bool) {
         var frame = selectedBar.frame
         frame.size.width = self.frame.size.width / CGFloat(optionsCount)
         frame.origin.x = frame.size.width * CGFloat(selectedIndex)
@@ -67,12 +67,12 @@ open class BarView: UIView {
         }
     }
     
-    open func moveTo(index: Int, animated: Bool) {
+    open func moveToIndex(index: Int, animated: Bool) {
         selectedIndex = index
-        updateSelectedBarPosition(with: animated)
+        updateSelectedBarPositionWithAnimation(animated)
     }
     
-    open func move(fromIndex: Int, toIndex: Int, progressPercentage: CGFloat) {
+    open func moveToIndex(fromIndex: Int, toIndex: Int, progressPercentage: CGFloat) {
         selectedIndex = (progressPercentage > 0.5) ? toIndex : fromIndex
         
         var newFrame = selectedBar.frame
@@ -88,6 +88,6 @@ open class BarView: UIView {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        updateSelectedBarPosition(with: false)
+        updateSelectedBarPositionWithAnimation(false)
     }
 }

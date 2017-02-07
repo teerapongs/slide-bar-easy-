@@ -16,5 +16,5 @@ target 'MenuBarTest3' do
     inherit! :search_paths
     # Pods for testing
   end
-pod 'XLPagerTabStrip', '~> 7.0'
+pod 'XLPagerTabStrip', :git => 'https://github.com/KelvinJin/XLPagerTabStrip', :branch => 'swift3'
 end
